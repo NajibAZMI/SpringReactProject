@@ -5,10 +5,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Page from './langSwitcher/Page';
+import Form from './Forms/Form';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const FruitsArray=["A","B","C","D"]
 root.render(
-    <Page/>
+    <Form/>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -2,38 +2,26 @@ import { useState,useRef, useEffect } from "react";
 
 export default function Form() {
   const inputNameRef=useRef()
-  const inputAgeRef=useRef()
+  const inputEmailRef=useRef()
+  const inputMessageRef=useRef()
   const inputAcceptRef=useRef()
-  const [formValues,setFormValues]=useState({})
-
-  useEffect(()=>{
-    inputAcceptRef.current.value='on'
-    inputAgeRef.current.value=18
-    inputNameRef.current.value='NAJIB'
-  },[])
-
-  const handleChange=(e)=>{
-    console.log(e.currentTarget.id)
-    const id=e.currentTarget.id
-    const value=e.currentTarget.value
-    setFormValues(preveState=>{
-      console.log(preveState)
-      return {...preveState,...{[id]:value}}
-    })
+  const inputCountryRef=useRef()
+  const validateForm=()=>{
+    const NameValue=inputNameRef.current.value
+    const EmailValue=inputEmailRef.current.value
+    const MessageValue=inputMessageRef.current.value
+    const CountryValue=inputCountryRef.current.value
+    const AcceptValue=inputAcceptRef.current.checked
+    console.log("Nom :",NameValue,"Email :",EmailValue,"Message :",MessageValue,"Country :",CountryValue,"Accept Condition ?",AcceptValue)
   }
+
   const handleSubmit=()=>{
-    const values={
-    Accept :inputAcceptRef.current.value,
-    Age :inputAgeRef.current.value,
-    Name :inputNameRef.current.value
-    }
-    console.log(values)
+          validateForm()
   }
- 
   return (
     <div className="container my-5">
     <h2>Contact Form</h2>
-    <form>
+    <form onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="name">Name</label>
         <input type="text" id="name" className="form-control" ref={inputNameRef} />
@@ -41,17 +29,17 @@ export default function Form() {
   
       <div className="form-group">
         <label htmlFor="email">Email</label>
-        <input type="email" id="email" className="form-control"  />
+        <input type="email" id="email" className="form-control" ref={inputEmailRef} />
       </div>
   
       <div className="form-group">
         <label htmlFor="message">Message</label>
-        <textarea id="message" className="form-control" ></textarea>
+        <textarea id="message" className="form-control" ref={inputMessageRef}></textarea>
       </div>
   
       <div className="form-group">
         <label htmlFor="country">Country</label>
-        <select id="country" className="form-control" >
+        <select id="country" className="form-control" ref={inputCountryRef} >
           <option value="morocco">Morocco</option>
           <option value="algeria">Algeria</option>
           <option value="tunisia">Tunisia</option>
@@ -65,10 +53,10 @@ export default function Form() {
       </div>
   
       <div className="form-check">
-        <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-          Save
-        </button>
-      </div>
+          <button type="submit" className="btn btn-primary">
+            Save
+          </button>
+        </div>
     </form>
   </div>
   

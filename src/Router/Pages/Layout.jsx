@@ -1,26 +1,27 @@
 import React from "react";
+import { Link, Outlet } from "react-router-dom";
 
 export default function Layout() {
   return (
-    <>
-      <ul class="nav justify-content-center  ">
-        <li class="nav-item">
-                    
-          <a class="nav-link active" href="/" aria-current="page">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/blogs">
-           Blogs
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="/contact">
-           Contact
-          </a>
-        </li>
-      </ul>
+   <>               
+    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div className="container">
+        <ul className="navbar-nav mx-auto">
+          <li className="nav-item">
+            <Link to="/" className="nav-link text-white">Home</Link>   
+          </li>
+          <li className="nav-item">
+            <Link to="/blogs" className="nav-link text-white">Blogs</Link>  
+          </li>
+          <li className="nav-item">
+            <Link to="/contact" className="nav-link text-white">Contact</Link> 
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div className="container-fluid w-75 mx-auto">
+             <Outlet/>       
+    </div>
     </>
   );
 }

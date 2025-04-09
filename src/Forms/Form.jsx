@@ -17,7 +17,9 @@ export default function Form() {
       </li>
     ));
   };
-
+  const displayError=(fieldName)=>{
+     return <div></div>
+  }
   const ResetForm = () => {
     inputNameRef.current.value = "";
     inputEmailRef.current.value = "";
@@ -35,14 +37,12 @@ export default function Form() {
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
     const MessageValue = inputMessageRef.current.value;
-
+    const AcceptAll=inputAcceptRef.current.checked;
     let newErrors = [];
 
     if (NameValue.trim() === "") {
       newErrors.push({ field: "name", Message: "Field required" });
       document.getElementById('name').style.border = '1px solid red';
-      document.getElementById("name_message").style.color="red"
-       document.getElementById("name_message").textContent='Field required'
     }
 
     if (EmailValue.trim() === "") {
@@ -56,6 +56,11 @@ export default function Form() {
     if (MessageValue.trim() === "") {
       newErrors.push({ field: "message", Message: "Field required" });
       document.getElementById('message').style.border = '1px solid red';
+    }
+
+    if (!AcceptAll) {
+      newErrors.push({ field: "accept", Message: "Field required" });
+      document.getElementById('accept').style.border = '1px solid red';
     }
 
     setErrors(newErrors);
@@ -101,7 +106,7 @@ export default function Form() {
             className="form-control"
             ref={inputNameRef}
           />
-          <p id="name_message"></p>
+          {displayError('name')}
         </div>
 
         <div className="form-group">
@@ -112,6 +117,7 @@ export default function Form() {
             className="form-control"
             ref={inputEmailRef}
           />
+          {displayError('email')}
         </div>
 
         <div className="form-group">
@@ -121,6 +127,7 @@ export default function Form() {
             className="form-control"
             ref={inputMessageRef}
           ></textarea>
+          {displayError('message')}
         </div>
 
         <div className="form-group">
@@ -141,6 +148,7 @@ export default function Form() {
             ref={inputAcceptRef}
           />
           <label htmlFor="accept">Accept our rules</label>
+          {displayError('accept')}
         </div>
 
         <div className="form-group">

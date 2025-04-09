@@ -52,7 +52,7 @@ export default function Form() {
         <label htmlFor="accept">Accept our rules</label>
       </div>
   
-      <div className="form-check">
+      <div className="form-group">
           <button type="submit" className="btn btn-primary">
             Save
           </button>

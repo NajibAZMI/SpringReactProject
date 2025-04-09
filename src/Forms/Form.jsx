@@ -9,11 +9,11 @@ export default function Form() {
 
   const [isFormSent,setIsFormSent]=useState()
   const [errors,setErrors]=useState([])
-
   const displayErrors=()=>{
-    return errors.map((error)=>{
-          return <li>{error.field}:{error.Message}</li>
-    })
+    return errors.map((error, index) => (
+      <li key={index}>{error.field} : {error.Message}</li>
+    ));
+  
   }
 
   const ResetForm=()=>{
@@ -23,16 +23,22 @@ export default function Form() {
     inputCountryRef.current.value='';
      inputAcceptRef.current.checked=false;
 
- 
   }
+  function isValidEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+   
+
 
   const validateForm = () => {
+    setErrors([])
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
     const MessageValue = inputMessageRef.current.value;
     const CountryValue = inputCountryRef.current.value;
     const AcceptValue = inputAcceptRef.current.checked;
-
+    let IsFormValid=true
     if(NameValue.trim()===''){
          setErrors(prevState=> [...prevState,{field:['Name'],Message:['field required']}]) 
         
@@ -40,44 +46,43 @@ export default function Form() {
     
     if(EmailValue.trim()===''){
       setErrors(prevState=> [...prevState,{field:['Email'],Message:['field required']}]) 
-     
- }
+    }else if(!isValidEmail(EmailValue)){
+      setErrors(prevState=> [...prevState,{field:['Email'],Message:['Email Invalid']}]) 
+  
+    }
 
+
+
+    if(MessageValue.trim()===''){
+      setErrors(prevState=> [...prevState,{field:['Message'],Message:['field required']}]) 
+    }
+   if(errors.length>0){
+    IsFormValid=false
+    
+   }
+   return IsFormValid
   };
-
+ 
   const handleSubmit = (e) => {
+
     e.preventDefault();
-    validateForm()
-    const NameValue = inputNameRef.current.value;
-    const EmailValue = inputEmailRef.current.value;
-    const MessageValue = inputMessageRef.current.value;
-    const CountryValue = inputCountryRef.current.value;
-    const AcceptValue = inputAcceptRef.current.checked;
-    console.log(
-      "Nom :",
-      NameValue,
-      "Email :",
-      EmailValue,
-      "Message :",
-      MessageValue,
-      "Country :",
-      CountryValue,
-      "Accept Condition ?",
-      AcceptValue
-    );
-    setIsFormSent(true)
-    ResetForm()
+    setIsFormSent(false)
+     if(validateForm()){
+         setIsFormSent(true)
+         ResetForm()
+     }
+     
   };
   return (
     <div className="container my-5">
-      {isFormSent ?
-           <div class="alert alert-success" role="alert">
-           <strong>Success</strong> Message Sent Successfully !!
-         </div>
-         :
-         ''
-    }
       
+       {isFormSent ? 
+              <div class="alert alert-success" role="alert">
+              <strong>Success</strong> Form Sent Successfully !!
+            </div>
+             :
+            ''
+      }
 
       <form onSubmit={handleSubmit}>
         {errors.length>0 ?
@@ -88,9 +93,10 @@ export default function Form() {
           </ul>
         </div>
          :
-         ''
+        ''
       }
-         {JSON.stringify(errors)}
+      
+
         <h2>Contact Form</h2>
         <div className="form-group">
           <label htmlFor="name">Name</label>
@@ -105,7 +111,7 @@ export default function Form() {
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
-            type="email"
+            type="text"
             id="email"
             className="form-control"
             ref={inputEmailRef}

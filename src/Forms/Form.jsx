@@ -8,8 +8,26 @@ export default function Form() {
   const inputCountryRef = useRef();
 
   const [isFormSent,setIsFormSent]=useState()
+  
+  const ResetForm=()=>{
+    inputNameRef.current.value='';
+     inputEmailRef.current.value='';
+     inputMessageRef.current.value='';
+    inputCountryRef.current.value='';
+     inputAcceptRef.current.checked=false;
+  }
 
   const validateForm = () => {
+    const NameValue = inputNameRef.current.value;
+    const EmailValue = inputEmailRef.current.value;
+    const MessageValue = inputMessageRef.current.value;
+    const CountryValue = inputCountryRef.current.value;
+    const AcceptValue = inputAcceptRef.current.checked;
+    
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
     const MessageValue = inputMessageRef.current.value;
@@ -27,12 +45,8 @@ export default function Form() {
       "Accept Condition ?",
       AcceptValue
     );
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    validateForm();
     setIsFormSent(true)
+    ResetForm()
   };
   return (
     <div className="container my-5">

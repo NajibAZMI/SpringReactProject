@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 export default function Form() {
   const inputNameRef = useRef();
@@ -7,97 +7,86 @@ export default function Form() {
   const inputAcceptRef = useRef();
   const inputCountryRef = useRef();
 
-  const [isFormSent,setIsFormSent]=useState()
-  const [errors,setErrors]=useState([])
-  const displayErrors=()=>{
+  const [isFormSent, setIsFormSent] = useState(false);
+  const [errors, setErrors] = useState([]);
+
+  const displayErrors = () => {
     return errors.map((error, index) => (
-      <li key={index}>{error.field} : {error.Message}</li>
+      <li key={index}>
+        {error.field} : {error.Message}
+      </li>
     ));
-  
-  }
+  };
 
-  const ResetForm=()=>{
-    inputNameRef.current.value='';
-     inputEmailRef.current.value='';
-     inputMessageRef.current.value='';
-    inputCountryRef.current.value='';
-     inputAcceptRef.current.checked=false;
+  const ResetForm = () => {
+    inputNameRef.current.value = "";
+    inputEmailRef.current.value = "";
+    inputMessageRef.current.value = "";
+    inputCountryRef.current.value = "";
+    inputAcceptRef.current.checked = false;
+  };
 
-  }
   function isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   }
-   
-
 
   const validateForm = () => {
-    setErrors([])
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
     const MessageValue = inputMessageRef.current.value;
-    const CountryValue = inputCountryRef.current.value;
-    const AcceptValue = inputAcceptRef.current.checked;
-    let IsFormValid=true
-    if(NameValue.trim()===''){
-         setErrors(prevState=> [...prevState,{field:['Name'],Message:['field required']}]) 
-        
-    }
-    
-    if(EmailValue.trim()===''){
-      setErrors(prevState=> [...prevState,{field:['Email'],Message:['field required']}]) 
-    }else if(!isValidEmail(EmailValue)){
-      setErrors(prevState=> [...prevState,{field:['Email'],Message:['Email Invalid']}]) 
-  
+
+    let newErrors = [];
+
+    if (NameValue.trim() === "") {
+      newErrors.push({ field: "Name", Message: "Field required" });
     }
 
-
-
-    if(MessageValue.trim()===''){
-      setErrors(prevState=> [...prevState,{field:['Message'],Message:['field required']}]) 
+    if (EmailValue.trim() === "") {
+      newErrors.push({ field: "Email", Message: "Field required" });
+    } else if (!isValidEmail(EmailValue)) {
+      newErrors.push({ field: "Email", Message: "Email invalid" });
     }
-   if(errors.length>0){
-    IsFormValid=false
-    
-   }
-   return IsFormValid
+
+    if (MessageValue.trim() === "") {
+      newErrors.push({ field: "Message", Message: "Field required" });
+    }
+
+    setErrors(newErrors);
+
+    return newErrors.length === 0;
   };
- 
+
   const handleSubmit = (e) => {
-
     e.preventDefault();
-    setIsFormSent(false)
-     if(validateForm()){
-         setIsFormSent(true)
-         ResetForm()
-     }
-     
+    setIsFormSent(false);
+
+    const isValid = validateForm();
+
+    if (isValid) {
+      setIsFormSent(true);
+      ResetForm();
+    }
   };
+
   return (
     <div className="container my-5">
-      
-       {isFormSent ? 
-              <div class="alert alert-success" role="alert">
-              <strong>Success</strong> Form Sent Successfully !!
-            </div>
-             :
-            ''
-      }
+      {isFormSent && (
+        <div className="alert alert-success" role="alert">
+          <strong>Success</strong> Form Sent Successfully !!
+        </div>
+      )}
 
       <form onSubmit={handleSubmit}>
-        {errors.length>0 ?
-          <div class="alert alert-danger" role="alert">
-          <strong>Errors</strong>
-          <ul>
-            {displayErrors()}
-          </ul>
-        </div>
-         :
-        ''
-      }
-      
+        {errors.length > 0 && (
+          <div className="alert alert-danger" role="alert">
+            <strong>Errors</strong>
+            <ul>{displayErrors()}</ul>
+          </div>
+        )}
 
         <h2>Contact Form</h2>
+
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input

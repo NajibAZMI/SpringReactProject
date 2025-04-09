@@ -8,13 +8,22 @@ export default function Form() {
   const inputCountryRef = useRef();
 
   const [isFormSent,setIsFormSent]=useState()
-  
+  const [errors,setErrors]=useState([])
+
+  const displayErrors=()=>{
+    return errors.map((error)=>{
+          return <li>{error.field}:{error.Message}</li>
+    })
+  }
+
   const ResetForm=()=>{
     inputNameRef.current.value='';
      inputEmailRef.current.value='';
      inputMessageRef.current.value='';
     inputCountryRef.current.value='';
      inputAcceptRef.current.checked=false;
+
+ 
   }
 
   const validateForm = () => {
@@ -23,11 +32,22 @@ export default function Form() {
     const MessageValue = inputMessageRef.current.value;
     const CountryValue = inputCountryRef.current.value;
     const AcceptValue = inputAcceptRef.current.checked;
+
+    if(NameValue.trim()===''){
+         setErrors(prevState=> [...prevState,{field:['Name'],Message:['field required']}]) 
+        
+    }
     
+    if(EmailValue.trim()===''){
+      setErrors(prevState=> [...prevState,{field:['Email'],Message:['field required']}]) 
+     
+ }
+
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    validateForm()
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
     const MessageValue = inputMessageRef.current.value;
@@ -60,6 +80,17 @@ export default function Form() {
       
 
       <form onSubmit={handleSubmit}>
+        {errors.length>0 ?
+          <div class="alert alert-danger" role="alert">
+          <strong>Errors</strong>
+          <ul>
+            {displayErrors()}
+          </ul>
+        </div>
+         :
+         ''
+      }
+         {JSON.stringify(errors)}
         <h2>Contact Form</h2>
         <div className="form-group">
           <label htmlFor="name">Name</label>

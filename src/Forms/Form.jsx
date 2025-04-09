@@ -40,16 +40,20 @@ export default function Form() {
 
     if (NameValue.trim() === "") {
       newErrors.push({ field: "Name", Message: "Field required" });
+      document.getElementById('name').style.border = '1px solid red';
     }
 
     if (EmailValue.trim() === "") {
       newErrors.push({ field: "Email", Message: "Field required" });
+      document.getElementById('email').style.border = '1px solid red';
     } else if (!isValidEmail(EmailValue)) {
       newErrors.push({ field: "Email", Message: "Email invalid" });
+      document.getElementById('email').style.border = '1px solid red';
     }
 
     if (MessageValue.trim() === "") {
       newErrors.push({ field: "Message", Message: "Field required" });
+      document.getElementById('message').style.border = '1px solid red';
     }
 
     setErrors(newErrors);

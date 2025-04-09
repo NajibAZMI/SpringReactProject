@@ -6,6 +6,9 @@ export default function Form() {
   const inputMessageRef = useRef();
   const inputAcceptRef = useRef();
   const inputCountryRef = useRef();
+
+  const [isFormSent,setIsFormSent]=useState()
+
   const validateForm = () => {
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
@@ -29,12 +32,18 @@ export default function Form() {
   const handleSubmit = (e) => {
     e.preventDefault();
     validateForm();
+    setIsFormSent(true)
   };
   return (
     <div className="container my-5">
-      <div class="alert alert-danger" role="alert">
-        <strong>Alert Heading</strong> Some Word
-      </div>
+      {isFormSent ?
+           <div class="alert alert-success" role="alert">
+           <strong>Success</strong> Message Sent Successfully !!
+         </div>
+         :
+         ''
+    }
+      
 
       <form onSubmit={handleSubmit}>
         <h2>Contact Form</h2>

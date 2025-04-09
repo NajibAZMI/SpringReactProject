@@ -41,6 +41,8 @@ export default function Form() {
     if (NameValue.trim() === "") {
       newErrors.push({ field: "name", Message: "Field required" });
       document.getElementById('name').style.border = '1px solid red';
+      document.getElementById("name_message").style.color="red"
+       document.getElementById("name_message").textContent='Field required'
     }
 
     if (EmailValue.trim() === "") {
@@ -99,6 +101,7 @@ export default function Form() {
             className="form-control"
             ref={inputNameRef}
           />
+          <p id="name_message"></p>
         </div>
 
         <div className="form-group">

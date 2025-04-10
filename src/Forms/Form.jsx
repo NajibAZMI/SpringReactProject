@@ -9,6 +9,17 @@ export default function Form() {
 
   const [isFormSent, setIsFormSent] = useState(false);
   const [errors, setErrors] = useState([]);
+  
+  const resetFieldStyles = () => {
+    const fields = ['name', 'email', 'message', 'accept'];
+    fields.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.style.border = '';
+      }
+    });
+  };
+  
 
   const displayErrors = () => {
     return errors.map((error, index) => (
@@ -38,6 +49,8 @@ export default function Form() {
   }
 
   const validateForm = () => {
+
+    resetFieldStyles();
     const NameValue = inputNameRef.current.value;
     const EmailValue = inputEmailRef.current.value;
     const MessageValue = inputMessageRef.current.value;

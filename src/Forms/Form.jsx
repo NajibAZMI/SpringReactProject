@@ -17,9 +17,13 @@ export default function Form() {
       </li>
     ));
   };
-  const displayError=(fieldName)=>{
-     return <div></div>
-  }
+  const displayError = (fieldName) => {
+    const error = errors.find((error) => error.field === fieldName);
+    return error ? (
+      <div style={{ color: "red", fontSize: "0.9em" }}>{error.Message}</div>
+    ) : null;
+  };
+  
   const ResetForm = () => {
     inputNameRef.current.value = "";
     inputEmailRef.current.value = "";

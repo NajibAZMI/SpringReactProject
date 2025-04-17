@@ -1,5 +1,5 @@
 import React from 'react'
-
+import  './Blogs.css'
 export default function Blogs() {
   return (
                     <div class="container py-5 text-center">

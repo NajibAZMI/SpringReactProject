@@ -45,17 +45,30 @@ const cars = [
 
 export default function CarList() {
   const displayCars = () => {
-    return cars.map((car, index) => {
+    return cars.map((car,index) => {
       return <CarCart key={index} {...car} />;
     });
   };
   return (
     <>
-      <nav className="navbar navbar-expand navbar-light bg-light">
-        <ul className="nav navbar-nav">
-        {displayCars()}
-        </ul>
-      </nav>
+      <div className="table-responsive">
+        <table className="table table-primary">
+          <thead>
+            <tr>
+              <th>Brand</th>
+              <th>Model</th>
+              <th>Body</th>
+              <th>Color</th>
+              <th>Price</th>
+              <th>Year</th>
+            </tr>
+          </thead>
+          <tbody>
+          {displayCars()}
+          </tbody>
+        </table>
+      </div>
+
      
     </>
   );

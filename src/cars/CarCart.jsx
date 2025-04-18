@@ -3,11 +3,14 @@ import React from 'react'
 export default function CarCart({brand,model,body,color,price,year}) {
   return (
     <>
-      <li className="nav-item">
-            <a className="nav-link" href="#">
-            {brand}
-            </a>
-      </li>
+      <tr>
+           <td>{brand}</td>
+           <td>{model}</td>
+           <td>{body}</td>
+           <td>{color}</td>
+           <td>{price}</td>
+           <td>{year}</td>         
+      </tr>
     </>
   )
 }

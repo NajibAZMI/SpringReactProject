@@ -1,19 +1,49 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default  function LoginForm() {
+export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState(null);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Ici, vous pouvez envoyer les données à votre backend
-    console.log('Email:', email);
-    console.log('Mot de passe:', password);
-  };
+  const navigate = useNavigate();
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const response = await fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ login: email, password }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Identifiants incorrects');
+    }
+
+    const data = await response.json();
+    setRole(data.role);
+    setError('');
+    localStorage.setItem("user", JSON.stringify(data));
+    if (data.role === 'ADMIN_ROLE') {
+      navigate('/admin-dashboard');
+    } else if (data.role === 'USER_ROLE') {
+      navigate('/user-dashboard');
+    }
+  } catch (err) {
+    setError(err.message);
+  }
+};
+
 
   return (
     <div style={styles.container}>
       <h2>Connexion</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit} style={styles.form}>
         <input
           type="email"
@@ -33,6 +63,7 @@ export default  function LoginForm() {
         />
         <button type="submit" style={styles.button}>Se connecter</button>
       </form>
+      {role && <p>Rôle détecté : <strong>{role}</strong></p>}
     </div>
   );
 }
@@ -68,4 +99,3 @@ const styles = {
     cursor: 'pointer',
   }
 };
-

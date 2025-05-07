@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { Link } from 'react-router-dom';
 export default function AdminHome(){
   const [user, setUser] = useState(null);
 
@@ -14,10 +14,24 @@ export default function AdminHome(){
     return <p>Chargement...</p>; // Ou redirection
   }
 
-  return (
+  return (<>
     <div style={{ textAlign: 'center', marginTop: '50px' }}>
       <h1>Bienvenue, {user.login}</h1>
+      <p>Nom ,{user.nom}</p>
       <p>Rôle : {user.role}</p>
     </div>
+    <button onClick={() => {
+                    localStorage.removeItem('user');
+                    window.location.href = '/'; 
+                  }}>
+                    Déconnexion
+                  </button>
+                  <Link to="/Admin/ajouter-utilisateur">
+        <button>Ajouter un utilisateur</button>
+      </Link>
+      <Link to="/Admin/UserList">
+        <button>Consulté Utilisiateur</button>
+      </Link>
+                  </>     
   );
 }

@@ -14,10 +14,17 @@ export default function UserHome(){
     return <p>Chargement...</p>; // Ou redirection
   }
 
-  return (
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Bienvenue, {user.login}</h1>
-      <p>Rôle : {user.role}</p>
-    </div>
-  );
+  return (<>
+                    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+                      <h1>Bienvenue, {user.login}</h1>
+                      <p>Rôle : {user.role}</p>
+                    </div>
+                    <button onClick={() => {
+                                    localStorage.removeItem('user');
+                                    window.location.href = '/'; 
+                                  }}>
+                                    Déconnexion
+                                  </button>
+                                  </>     
+                  );
 }

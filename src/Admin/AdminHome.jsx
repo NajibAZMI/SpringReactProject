@@ -32,6 +32,12 @@ export default function AdminHome(){
       <Link to="/Admin/UserList">
         <button>Consulté Utilisiateur</button>
       </Link>
+      <Link to="/Admin/AddDataset">
+        <button>Ajouter Une Data Set</button>
+      </Link>
+      <Link to="/Admin/DataSetList">
+        <button>List Des DataSets</button>
+      </Link>
                   </>     
   );
 }

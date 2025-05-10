@@ -6,7 +6,7 @@ export default function AddUserForm() {
     prenom: "",
     login: "",
     password: "",
-    role: "ANNOTATEUR",
+    role: "USER_ROLE",
   });
 
   const handleChange = (e) => {
@@ -19,7 +19,7 @@ export default function AddUserForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:8080/api/utilisateurs", {
+    fetch("http://localhost:8080/api/utilisateurs/addAnnotateur", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,8 +109,8 @@ export default function AddUserForm() {
           <label>Rôle :</label>
           <br />
           <select name="role" value={formData.role} onChange={handleChange}>
-            <option value="ANNOTATEUR">Annotateur</option>
-            <option value="ADMIN">Admin</option>
+            <option value="USER_ROLE">Annotateur</option>
+            <option value="ADMIN_ROLE">Admin</option>
             {/* Ajoute d'autres rôles si nécessaire */}
           </select>
         </div>

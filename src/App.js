@@ -21,7 +21,7 @@ function App() {
         <Route path="/Admin/AddDataset" element={<AddDatasetForm />} /> 
         <Route path="/Admin/DataSetList" element={<DataSetList />} /> 
         <Route path="/Admin/datasets/:id" element={<DatasetDetail />} />
-        <Route path="/Admin/datasets/AddAnnotateurs/:id" element={<AffecterAnnotateurs />} />
+        <Route path="/Admin/datasets/AddAnnotateurs/:datasetId" element={<AffecterAnnotateurs />} />
       </Routes>
     </Router>
   );

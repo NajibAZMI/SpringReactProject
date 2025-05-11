@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { Link } from 'react-router-dom';
 export default function UserHome(){
   const [user, setUser] = useState(null);
 
@@ -18,6 +18,9 @@ export default function UserHome(){
                     <div style={{ textAlign: 'center', marginTop: '50px' }}>
                       <h1>Bienvenue, {user.login}</h1>
                       <p>Rôle : {user.role}</p>
+                       <Link to={`/User/TachesList/${user.id}`}>
+                        <button>Consulté Utilisiateur</button>
+                       </Link>
                     </div>
                     <button onClick={() => {
                                     localStorage.removeItem('user');

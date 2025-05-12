@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 export default function DatasetList() {
   const [datasets, setDatasets] = useState([]);
+  const [avancements, setAvancements] = useState({});
 
   useEffect(() => {
-   
     const fetchDatasets = async () => {
       try {
         const response = await fetch('http://localhost:8080/api/datasets');
@@ -14,9 +14,23 @@ export default function DatasetList() {
         }
         const data = await response.json();
         setDatasets(data);
+
+        // Charger l'avancement pour chaque dataset
+        data.forEach(async (dataset) => {
+          try {
+            const res = await fetch(`http://localhost:8080/api/datasets/Avancement/${dataset.id}`);
+            if (!res.ok) {
+              throw new Error(`Erreur lors du chargement de l'avancement pour le dataset ${dataset.id}`);
+            }
+            const avancement = await res.json();
+            setAvancements(prev => ({ ...prev, [dataset.id]: avancement }));
+          } catch (err) {
+            console.error(err);
+            setAvancements(prev => ({ ...prev, [dataset.id]: 0 }));
+          }
+        });
       } catch (error) {
         console.error('Erreur :', error);
-
       }
     };
 
@@ -40,19 +54,19 @@ export default function DatasetList() {
             <tr key={dataset.id}>
               <td>{dataset.nomDataset}</td>
               <td>{dataset.descriptionDataset}</td>
-              <td>0%</td>
+              <td>{avancements[dataset.id] !== undefined ? `${avancements[dataset.id].toFixed(2)}%` : 'Chargement...'}</td>
               <td>
-                <Link to={`/Admin/datasets/${dataset.id}`}>Voir</Link>
+                <Link to={`/Admin/datasets/${dataset.id}`} style={{ marginRight: '10px' }}>Voir</Link>
                 <Link to={`/Admin/datasets/AddAnnotateurs/${dataset.id}`}>Ajouter Annotateurs</Link>
-
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
       <Link to="/Admin/admin-dashboard">
-              <button style={{ marginTop: "10px" }}>Retour à l'accueil admin</button>
-            </Link>
+        <button style={{ marginTop: "10px" }}>Retour à l'accueil admin</button>
+      </Link>
     </div>
   );
 }

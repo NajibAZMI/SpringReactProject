@@ -10,6 +10,7 @@ import DataSetList from './Admin/DataSetList.jsx';
 import DatasetDetail from './Admin/DataSetDetail.jsx';
 import AffecterAnnotateurs from './Admin/AffecterAnnotateurs.jsx';
 import TachesList from './Annotateur/TachesList.jsx';
+import TravaillerTache from './Annotateur/TravaillerTache.jsx';
 function App() {
   return (
     <Router>
@@ -24,7 +25,7 @@ function App() {
         <Route path="/Admin/datasets/:id" element={<DatasetDetail />} />
         <Route path="/Admin/datasets/AddAnnotateurs/:datasetId" element={<AffecterAnnotateurs />} />
         <Route path="/User/TachesList/:id" element={<TachesList />} />
-      
+        <Route path="/User/TravaillerTache/:idTache" element={<TravaillerTache />} />
       </Routes>
     </Router>
   );

@@ -1,10 +1,9 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useParams ,Link} from "react-router-dom";
+import { useState,useEffect } from "react";
 export default function TachesList() {
   const { id } = useParams();
   const [Taches, setTaches] = useState([]);
-
+   
   useEffect(() => {
     const fetchDatasets = async () => {
       try {
@@ -26,7 +25,7 @@ export default function TachesList() {
   return (
     <>
       <div>id :{id}</div>
-      <div>list Des Taches</div>
+      <div>liste Des Taches</div>
 
       <table
         border="1"
@@ -51,7 +50,7 @@ export default function TachesList() {
               <td>{Tache.datelimite}</td>
               <td>Avancement</td>
               <td>{Tache.taille}</td>
-              <td>Action</td>
+              <td>  <Link to={`/User/TravaillerTache/${Tache.id}`}>Travailler</Link></td>
             </tr>
           ))}
         </tbody>

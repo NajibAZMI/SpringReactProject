@@ -111,7 +111,6 @@ export default function AddUserForm() {
           <select name="role" value={formData.role} onChange={handleChange}>
             <option value="USER_ROLE">Annotateur</option>
             <option value="ADMIN_ROLE">Admin</option>
-            {/* Ajoute d'autres rôles si nécessaire */}
           </select>
         </div>
 

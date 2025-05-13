@@ -24,7 +24,7 @@ export default function TachesList() {
   }, []);
   return (
     <>
-      <div>id :{id}</div>
+      
       <div>liste Des Taches</div>
 
       <table
@@ -48,7 +48,7 @@ export default function TachesList() {
               <td>{Tache.id}</td>
               <td>{Tache.nomDataset|| "N/A"}</td>
               <td>{Tache.datelimite}</td>
-              <td>Avancement</td>
+              <td>{Tache.avancement}%</td>
               <td>{Tache.taille}</td>
               <td>  <Link to={`/User/TravaillerTache/${Tache.id}`}>Travailler</Link></td>
             </tr>

@@ -11,7 +11,7 @@ export default function AdminHome(){
   }, []);
 
   if (!user) {
-    return <p>Chargement...</p>; // Ou redirection
+    return <p>Chargement...</p>; 
   }
 
   return (<>
@@ -26,11 +26,9 @@ export default function AdminHome(){
                   }}>
                     Déconnexion
                   </button>
-                  <Link to="/Admin/ajouter-utilisateur">
-        <button>Ajouter un utilisateur</button>
-      </Link>
-      <Link to="/Admin/UserList">
-        <button>Consulté Utilisiateur</button>
+
+      <Link to="/Admin/GestionAnntateurs">
+        <button>Gérer Les Annotateurs</button>
       </Link>
       <Link to="/Admin/AddDataset">
         <button>Ajouter Une Data Set</button>

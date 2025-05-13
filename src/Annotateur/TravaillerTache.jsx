@@ -53,7 +53,7 @@ export default function TravaillerTache() {
 
 
     try {
-      const response = await fetch("http://localhost:8080/api/datasets/api/annotations", {
+      const response = await fetch("http://localhost:8080/api/datasets/annote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -66,7 +66,8 @@ export default function TravaillerTache() {
       if (!response.ok) throw new Error("Erreur lors de l'enregistrement");
 
       alert("Annotation enregistrée !");
-      setSelectedClass(""); // reset après validation
+      setSelectedClass(""); 
+      handleSuivant()
     } catch (error) {
       console.error(error);
       alert("Échec de l'annotation");

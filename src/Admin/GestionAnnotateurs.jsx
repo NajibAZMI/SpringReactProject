@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-export default function UserList() {
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+export default function GestionAnntateurs() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch des utilisateurs depuis le backend
-    fetch('http://localhost:8080/api/utilisateurs')
+    fetch("http://localhost:8080/api/utilisateurs")
       .then((res) => {
         if (!res.ok) {
-          throw new Error('Erreur serveur');
+          throw new Error("Erreur serveur");
         }
         return res.json();
       })
       .then((data) => {
-        setUsers(data); // Met à jour l'état avec la liste des utilisateurs
+        setUsers(data);
         setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        setError('Erreur de chargement des utilisateurs');
+        setError("Erreur de chargement des utilisateurs");
         setLoading(false);
       });
-  }, []); // L'array vide [] signifie que ce useEffect se lance une seule fois lors du montage du composant.
+  }, []);
 
   if (loading) {
     return <p>Chargement des utilisateurs...</p>;
@@ -35,14 +34,14 @@ export default function UserList() {
 
   return (
     <div>
-      <h2>Liste des utilisateurs</h2>
+      <h2>Gestion des Annotateurs</h2>
+      <Link to="/Admin/ajouter-utilisateur">+Ajouter</Link>
       <table>
         <thead>
           <tr>
             <th>Nom</th>
             <th>Prénom</th>
-            <th>Email</th>
-            <th>Rôle</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -50,8 +49,13 @@ export default function UserList() {
             <tr key={user.id}>
               <td>{user.nom}</td>
               <td>{user.prenom}</td>
-              <td>{user.login}</td>
-              <td>{user.role}</td>
+              <td>
+                <Link to={`/Admin/ajouter-utilisateur/${user.id}`}>
+                  <button>Modifier</button>
+                </Link>
+
+                <button>Supprimer</button>
+              </td>
             </tr>
           ))}
         </tbody>

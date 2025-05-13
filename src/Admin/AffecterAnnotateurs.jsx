@@ -67,29 +67,25 @@ export default function AffecterAnnotateurs() {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Affecter des Annotateurs au Dataset #{datasetId}</h2>
+    <div className="container my-5">
+      <h2 className="text-center text-success mb-4">Affecter des Annotateurs au Dataset #{datasetId}</h2>
 
       {loading ? (
-        <p>Chargement des annotateurs...</p>
+        <p className="text-center">Chargement des annotateurs...</p>
       ) : (
         <>
-          <table
-            border="1"
-            cellPadding="10"
-            style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}
-          >
-            <thead>
+          <table className="table table-bordered table-striped">
+            <thead className="table-success">
               <tr>
-                <th>Nom de l'Annotateur</th>
-                <th>Sélectionner</th>
+                <th className="text-center">Nom de l'Annotateur</th>
+                <th className="text-center">Sélectionner</th>
               </tr>
             </thead>
             <tbody>
               {annotateurs.map((annotateur) => (
                 <tr key={annotateur.id}>
                   <td>{annotateur.nom}</td>
-                  <td>
+                  <td className="text-center">
                     <input
                       type="checkbox"
                       checked={!!selectedAnnotateurs[annotateur.id]}
@@ -101,22 +97,20 @@ export default function AffecterAnnotateurs() {
             </tbody>
           </table>
 
-          <button
-            onClick={handleAffecter}
-            disabled={sending}
-            style={{
-              marginTop: '20px',
-              padding: '10px 20px',
-              fontSize: '16px',
-              cursor: sending ? 'not-allowed' : 'pointer',
-              opacity: sending ? 0.7 : 1,
-            }}
-          >
-            {sending ? 'Affectation en cours...' : 'Valider'}
-          </button>
+          <div className="text-center">
+            <button
+              onClick={handleAffecter}
+              disabled={sending}
+              className={`btn btn-success ${sending ? 'disabled' : ''} mt-3`}
+            >
+              {sending ? 'Affectation en cours...' : 'Valider'}
+            </button>
+          </div>
 
           {message && (
-            <p style={{ marginTop: '20px', color: message.includes('succès') ? 'green' : 'red' }}>{message}</p>
+            <p className={`mt-3 text-center ${message.includes('succès') ? 'text-success' : 'text-danger'}`}>
+              {message}
+            </p>
           )}
         </>
       )}

@@ -1,6 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+
 export default function AddUserForm() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEdit = !!id;
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
@@ -8,6 +12,26 @@ export default function AddUserForm() {
     password: "",
     role: "USER_ROLE",
   });
+
+  useEffect(() => {
+    if (isEdit) {
+      fetch(`http://localhost:8080/api/utilisateurs/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData({
+            nom: data.nom,
+            prenom: data.prenom,
+            login: data.login,
+            password: "",
+            role: data.role,
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Erreur lors du chargement des données");
+        });
+    }
+  }, [id, isEdit]);
 
   const handleChange = (e) => {
     setFormData({
@@ -18,12 +42,14 @@ export default function AddUserForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const url = isEdit
+      ? `http://localhost:8080/api/utilisateurs/update/${id}`
+      : "http://localhost:8080/api/utilisateurs/addAnnotateur";
+    const method = isEdit ? "PUT" : "POST";
 
-    fetch("http://localhost:8080/api/utilisateurs/addAnnotateur", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    fetch(url, {
+      method,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     })
       .then(async (res) => {
@@ -33,14 +59,13 @@ export default function AddUserForm() {
         }
         return res.json();
       })
-      .then((data) => {
-        alert("Utilisateur ajouté avec succès !");
-        setFormData({
-          nom: "",
-          prenom: "",
-          login: "",
-          password: "",
-          role: "USER_ROLE",
+      .then(() => {
+       navigate("/Admin/GestionAnntateurs", {
+          state: {
+            successMessage: isEdit
+              ? "Utilisateur modifié avec succès !"
+              : "Utilisateur ajouté avec succès !",
+          },
         });
       })
       .catch((err) => {
@@ -50,77 +75,85 @@ export default function AddUserForm() {
   };
 
   return (
-    <>
+    <div className="container mt-5" style={{ maxWidth: "600px" }}>
+      <h2 className="mb-4 text-center">
+        {isEdit ? "Modifier" : "Ajouter"} un utilisateur
+      </h2>
       <form
         onSubmit={handleSubmit}
-        style={{ margin: "20px auto", maxWidth: "400px" }}
+        className="border p-4 shadow rounded bg-light"
       >
-        <h2>Ajouter un utilisateur</h2>
-
-        <div>
-          <label>Nom :</label>
-          <br />
+        <div className="mb-3">
+          <label className="form-label">Nom :</label>
           <input
             type="text"
             name="nom"
             value={formData.nom}
             onChange={handleChange}
+            className="form-control"
             required
           />
         </div>
 
-        <div>
-          <label>Prénom :</label>
-          <br />
+        <div className="mb-3">
+          <label className="form-label">Prénom :</label>
           <input
             type="text"
             name="prenom"
             value={formData.prenom}
             onChange={handleChange}
+            className="form-control"
             required
           />
         </div>
 
-        <div>
-          <label>Email (login) :</label>
-          <br />
+        <div className="mb-3">
+          <label className="form-label">Email (login) :</label>
           <input
-            type="text"
+            type="email"
             name="login"
             value={formData.login}
             onChange={handleChange}
+            className="form-control"
             required
+            disabled={isEdit}
           />
         </div>
 
-        <div>
-          <label>Mot de passe :</label>
-          <br />
+        <div className="mb-3">
+          <label className="form-label">Mot de passe :</label>
           <input
             type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
-            required
+            className="form-control"
+            placeholder={isEdit ? "(Laisser vide pour ne pas changer)" : ""}
           />
         </div>
 
-        <div>
-          <label>Rôle :</label>
-          <br />
-          <select name="role" value={formData.role} onChange={handleChange}>
+        <div className="mb-3">
+          <label className="form-label">Rôle :</label>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="form-select"
+          >
             <option value="USER_ROLE">Annotateur</option>
             <option value="ADMIN_ROLE">Admin</option>
           </select>
         </div>
 
-        <button type="submit" style={{ marginTop: "10px" }}>
-          Ajouter
-        </button>
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-success">
+            {isEdit ? "Modifier" : "Ajouter"}
+          </button>
+          <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
+            Retour
+          </Link>
+        </div>
       </form>
-      <Link to="/Admin/admin-dashboard">
-        <button style={{ marginTop: "10px" }}>Retour à l'accueil admin</button>
-      </Link>
-    </>
+    </div>
   );
 }

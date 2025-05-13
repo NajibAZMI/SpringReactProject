@@ -15,7 +15,6 @@ export default function DatasetList() {
         const data = await response.json();
         setDatasets(data);
 
-        // Charger l'avancement pour chaque dataset
         data.forEach(async (dataset) => {
           try {
             const res = await fetch(
@@ -42,68 +41,71 @@ export default function DatasetList() {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Liste des Datasets</h2>
-      <table
-        border="1"
-        cellPadding="10"
-        style={{ width: "100%", borderCollapse: "collapse" }}
-      >
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>Description</th>
-            <th>Avancement</th>
-            <th>Action</th>
-            <th>Exporter</th>
-          </tr>
-        </thead>
-        <tbody>
-          {datasets.map((dataset) => (
-            <tr key={dataset.id}>
-              <td>{dataset.nomDataset}</td>
-              <td>{dataset.descriptionDataset}</td>
-              <td>
-                {avancements[dataset.id] !== undefined
-                  ? `${avancements[dataset.id].toFixed(2)}%`
-                  : "Chargement..."}
-              </td>
-              <td>
-                <Link
-                  to={`/Admin/datasets/${dataset.id}`}
-                  style={{ marginRight: "10px" }}
-                >
-                  Voir
-                </Link>
-                <Link to={`/Admin/datasets/AddAnnotateurs/${dataset.id}`}>
-                  Ajouter Annotateurs
-                </Link>
-              </td>
-              <td>
-                {avancements[dataset.id] === 100 ? (
-                  <button
-                    onClick={() =>
-                      window.open(
-                        `http://localhost:8080/api/datasets/${dataset.id}/export`,
-                        "_blank"
-                      )
-                    }
-                    style={{ padding: "5px 10px", cursor: "pointer" }}
-                  >
-                    Exporter CSV
-                  </button>
-                ) : (
-                  <span style={{ color: "gray" }}>Incomplet</span>
-                )}
-              </td>
+    <div className="container mt-5">
+      <h2 className="mb-4 text-center">Liste des Datasets</h2>
+      <div className="table-responsive">
+        <table className="table table-bordered table-hover align-middle">
+          <thead className="table-dark">
+            <tr>
+              <th>Nom</th>
+              <th>Description</th>
+              <th>Avancement</th>
+              <th>Action</th>
+              <th>Exporter</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {datasets.map((dataset) => (
+              <tr key={dataset.id}>
+                <td>{dataset.nomDataset}</td>
+                <td>{dataset.descriptionDataset}</td>
+                <td>
+                  {avancements[dataset.id] !== undefined
+                    ? `${avancements[dataset.id].toFixed(2)}%`
+                    : "Chargement..."}
+                </td>
+                <td>
+                  <Link
+                    to={`/Admin/datasets/${dataset.id}`}
+                    className="btn btn-sm btn-outline-primary me-2"
+                  >
+                    Voir
+                  </Link>
+                  <Link
+                    to={`/Admin/datasets/AddAnnotateurs/${dataset.id}`}
+                    className="btn btn-sm btn-outline-secondary"
+                  >
+                    Ajouter Annotateurs
+                  </Link>
+                </td>
+                <td>
+                  {avancements[dataset.id] === 100 ? (
+                    <button
+                      className="btn btn-success btn-sm"
+                      onClick={() =>
+                        window.open(
+                          `http://localhost:8080/api/datasets/${dataset.id}/export`,
+                          "_blank"
+                        )
+                      }
+                    >
+                      Exporter CSV
+                    </button>
+                  ) : (
+                    <span className="text-muted">Incomplet</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <Link to="/Admin/admin-dashboard">
-        <button style={{ marginTop: "10px" }}>Retour à l'accueil admin</button>
-      </Link>
+      <div className="text-center mt-4">
+        <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
+          Retour à l'accueil admin
+        </Link>
+      </div>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-export default function AdminHome(){
+
+export default function AdminHome() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -11,31 +12,41 @@ export default function AdminHome(){
   }, []);
 
   if (!user) {
-    return <p>Chargement...</p>; 
+    return (
+      <div className="text-center mt-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Chargement...</span>
+        </div>
+      </div>
+    );
   }
 
-  return (<>
-    <div style={{ textAlign: 'center', marginTop: '50px' }}>
-      <h1>Bienvenue, {user.login}</h1>
-      <p>Nom ,{user.nom}</p>
-      <p>Rôle : {user.role}</p>
-    </div>
-    <button onClick={() => {
-                    localStorage.removeItem('user');
-                    window.location.href = '/'; 
-                  }}>
-                    Déconnexion
-                  </button>
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  };
 
-      <Link to="/Admin/GestionAnntateurs">
-        <button>Gérer Les Annotateurs</button>
-      </Link>
-      <Link to="/Admin/AddDataset">
-        <button>Ajouter Une Data Set</button>
-      </Link>
-      <Link to="/Admin/DataSetList">
-        <button>List Des DataSets</button>
-      </Link>
-                  </>     
+  return (
+    <div className="container text-center mt-5">
+      <div className="card shadow p-4">
+       <h1 className="mb-3">Bienvenue,Mr. {user.nom}{user.prenom} </h1>
+
+        <div className="d-grid gap-2 col-6 mx-auto mt-4">
+          <button className="btn btn-danger" onClick={handleLogout}>
+            Déconnexion
+          </button>
+
+          <Link to="/Admin/GestionAnntateurs" className="btn btn-primary">
+            Gérer Les Annotateurs
+          </Link>
+          <Link to="/Admin/AddDataset" className="btn btn-success">
+            Ajouter Une Data Set
+          </Link>
+          <Link to="/Admin/DataSetList" className="btn btn-info">
+            Liste Des DataSets
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,9 +1,10 @@
-import { useParams ,Link} from "react-router-dom";
-import { useState,useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+
 export default function TachesList() {
   const { id } = useParams();
   const [Taches, setTaches] = useState([]);
-   
+
   useEffect(() => {
     const fetchDatasets = async () => {
       try {
@@ -21,18 +22,14 @@ export default function TachesList() {
     };
 
     fetchDatasets();
-  }, []);
-  return (
-    <>
-      
-      <div>liste Des Taches</div>
+  }, [id]);
 
-      <table
-        border="1"
-        cellPadding="10"
-        style={{ width: "100%", borderCollapse: "collapse" }}
-      >
-        <thead>
+  return (
+    <div className="container mt-5">
+      <h2 className="text-center mb-4">Liste des Tâches</h2>
+
+      <table className="table table-bordered table-hover">
+        <thead className="table-dark">
           <tr>
             <th>Id</th>
             <th>Nom DataSet</th>
@@ -43,18 +40,37 @@ export default function TachesList() {
           </tr>
         </thead>
         <tbody>
-          {Taches.map((Tache) => (
-            <tr key={Tache.id}>
-              <td>{Tache.id}</td>
-              <td>{Tache.nomDataset|| "N/A"}</td>
-              <td>{Tache.datelimite}</td>
-              <td>{Tache.avancement}%</td>
-              <td>{Tache.taille}</td>
-              <td>  <Link to={`/User/TravaillerTache/${Tache.id}`}>Travailler</Link></td>
+          {Taches.length > 0 ? (
+            Taches.map((Tache) => (
+              <tr key={Tache.id}>
+                <td>{Tache.id}</td>
+                <td>{Tache.nomDataset || "N/A"}</td>
+                <td>{Tache.datelimite}</td>
+                <td>{Tache.avancement}%</td>
+                <td>{Tache.taille}</td>
+                <td>
+                  <Link
+                    to={`/User/TravaillerTache/${Tache.id}`}
+                    className="btn btn-primary btn-sm"
+                  >
+                    Travailler
+                  </Link>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" className="text-center">
+                Aucune tâche disponible
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
-    </>
+
+      <Link to="/User/user-dashboard" className="btn btn-secondary mt-3">
+        Retour à l'accueil
+      </Link>
+    </div>
   );
 }

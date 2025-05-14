@@ -12,26 +12,41 @@ export default function AddUserForm() {
     password: "",
     role: "USER_ROLE",
   });
-
-  useEffect(() => {
-    if (isEdit) {
-      fetch(`http://localhost:8080/api/utilisateurs/${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setFormData({
-            nom: data.nom,
-            prenom: data.prenom,
-            login: data.login,
-            password: "",
-            role: data.role,
-          });
-        })
-        .catch((err) => {
-          console.error(err);
-          alert("Erreur lors du chargement des données");
-        });
+  const generateRandomPassword = (length = 10) => {
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+    let password = "";
+    for (let i = 0, n = charset.length; i < length; ++i) {
+      password += charset.charAt(Math.floor(Math.random() * n));
     }
-  }, [id, isEdit]);
+    return password;
+  };
+
+ useEffect(() => {
+  if (isEdit) {
+    fetch(`http://localhost:8080/api/utilisateurs/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setFormData({
+          nom: data.nom,
+          prenom: data.prenom,
+          login: data.login,
+          role: data.role
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Erreur lors du chargement des données");
+      });
+  } else {
+    // Ajout : on génère automatiquement un mot de passe
+    setFormData((prev) => ({
+      ...prev,
+      password: generateRandomPassword(),
+    }));
+  }
+}, [id, isEdit]);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -60,7 +75,7 @@ export default function AddUserForm() {
         return res.json();
       })
       .then(() => {
-       navigate("/Admin/GestionAnntateurs", {
+        navigate("/Admin/GestionAnntateurs", {
           state: {
             successMessage: isEdit
               ? "Utilisateur modifié avec succès !"
@@ -120,17 +135,7 @@ export default function AddUserForm() {
           />
         </div>
 
-        <div className="mb-3">
-          <label className="form-label">Mot de passe :</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="form-control"
-            placeholder={isEdit ? "(Laisser vide pour ne pas changer)" : ""}
-          />
-        </div>
+        
 
         <div className="mb-3">
           <label className="form-label">Rôle :</label>

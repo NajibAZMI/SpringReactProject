@@ -69,7 +69,7 @@ export default function GestionAnntateurs() {
                     to={`/Admin/ajouter-utilisateur/${user.id}`}
                     className="btn btn-sm btn-warning me-2"
                   >
-                    Modifier
+                    Modifier 
                   </Link>
                   <button className="btn btn-sm btn-danger">Supprimer</button>
                 </td>

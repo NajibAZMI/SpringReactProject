@@ -24,9 +24,10 @@ export default function AddUserForm() {
 
  useEffect(() => {
   if (isEdit) {
-    fetch(`http://localhost:8080/api/utilisateurs/${id}`)
+    fetch(`http://locahost:8080/api/utilisateurs/${id}`)
       .then((res) => res.json())
       .then((data) => {
+        
         setFormData({
           nom: data.nom,
           prenom: data.prenom,

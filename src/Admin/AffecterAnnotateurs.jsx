@@ -97,7 +97,7 @@ export default function AffecterAnnotateurs() {
             </tbody>
           </table>
 
-          <div className="text-center">
+          <div className="ext-center">
             <button
               onClick={handleAffecter}
               disabled={sending}

@@ -51,9 +51,14 @@ export default function TachesList() {
                 <td>
                   <Link
                     to={`/User/TravaillerTache/${Tache.id}`}
-                    className="btn btn-primary btn-sm"
+                    className="btn btn-sm"
+                    style={{
+                      backgroundColor:
+                        Tache.avancement === 100 ? "#28a745" : "#007bff",
+                      color: "white",
+                    }}
                   >
-                    Travailler
+                    {Tache.avancement === 100 ? "Terminé" : "Travailler"}
                   </Link>
                 </td>
               </tr>

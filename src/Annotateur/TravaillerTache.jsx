@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; 
 import { useEffect, useState } from "react";
 
 export default function TravaillerTache() {
@@ -7,6 +7,7 @@ export default function TravaillerTache() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedClass, setSelectedClass] = useState("");
   const [currentClasses, setCurrentClasses] = useState([]);
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const fetchCouples = async () => {
@@ -75,15 +76,18 @@ export default function TravaillerTache() {
   };
 
   const handleSuivant = () => {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < flatCouples.length) {
-      setCurrentIndex(nextIndex);
-      setSelectedClass("");
-      setCurrentClasses(flatCouples[nextIndex].classesPossibles);
-    } else {
-      alert("Fin des couples !");
-    }
-  };
+  const nextIndex = currentIndex + 1;
+  if (nextIndex < flatCouples.length) {
+    setCurrentIndex(nextIndex);
+    setSelectedClass("");
+    setCurrentClasses(flatCouples[nextIndex].classesPossibles);
+  } else {
+    alert("Annotation terminée !");
+    const user = JSON.parse(localStorage.getItem("user"));
+    navigate(`/User/TachesList/${user.id}`);
+  }
+};
+
 const handlePrecedent = () => {
     const nextIndex = currentIndex - 1;
     if (nextIndex < flatCouples.length) {

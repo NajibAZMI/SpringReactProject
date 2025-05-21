@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import AdminLayout from './AdminLayout';
 
 export default function AddUserForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = !!id;
+
   const [formData, setFormData] = useState({
     nom: "",
     prenom: "",
@@ -12,6 +14,7 @@ export default function AddUserForm() {
     password: "",
     role: "USER_ROLE",
   });
+
   const generateRandomPassword = (length = 10) => {
     const charset =
       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
@@ -22,32 +25,29 @@ export default function AddUserForm() {
     return password;
   };
 
- useEffect(() => {
-  if (isEdit) {
-    fetch(`http://localhost:8080/api/utilisateurs/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-
-        setFormData({
-          nom: data.nom,
-          prenom: data.prenom,
-          login: data.login,
-          role: data.role
+  useEffect(() => {
+    if (isEdit) {
+      fetch(`http://localhost:8080/api/utilisateurs/${id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setFormData({
+            nom: data.nom,
+            prenom: data.prenom,
+            login: data.login,
+            role: data.role,
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          alert("Erreur lors du chargement des données");
         });
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Erreur lors du chargement des données");
-      });
-  } else {
-    // Ajout : on génère automatiquement un mot de passe
-    setFormData((prev) => ({
-      ...prev,
-      password: generateRandomPassword(),
-    }));
-  }
-}, [id, isEdit]);
-
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        password: generateRandomPassword(),
+      }));
+    }
+  }, [id, isEdit]);
 
   const handleChange = (e) => {
     setFormData({
@@ -91,14 +91,11 @@ export default function AddUserForm() {
   };
 
   return (
-    <div className="container mt-5" style={{ maxWidth: "600px" }}>
+    <AdminLayout>
       <h2 className="mb-4 text-center">
         {isEdit ? "Modifier" : "Ajouter"} un utilisateur
       </h2>
-      <form
-        onSubmit={handleSubmit}
-        className="border p-4 shadow rounded bg-light"
-      >
+      <form onSubmit={handleSubmit} className="border p-4 shadow rounded bg-light">
         <div className="mb-3">
           <label className="form-label">Nom :</label>
           <input
@@ -136,8 +133,6 @@ export default function AddUserForm() {
           />
         </div>
 
-        
-
         <div className="mb-3">
           <label className="form-label">Rôle :</label>
           <select
@@ -160,6 +155,6 @@ export default function AddUserForm() {
           </Link>
         </div>
       </form>
-    </div>
+    </AdminLayout>
   );
 }

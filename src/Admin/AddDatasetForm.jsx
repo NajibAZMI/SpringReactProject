@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import AdminLayout from "./AdminLayout";
 export default function AddDatasetForm() {
   const [formData, setFormData] = useState({
     nomDataset: "",
@@ -26,7 +26,7 @@ export default function AddDatasetForm() {
     const formPayload = new FormData();
     formPayload.append("nomDataset", formData.nomDataset);
     formPayload.append("descriptionDataset", formData.descriptionDataset);
-    formPayload.append("classesPossible", formData.classes); // clé attendue par le backend
+    formPayload.append("classesPossible", formData.classes);
     formPayload.append("file", formData.file);
 
     try {
@@ -49,6 +49,7 @@ export default function AddDatasetForm() {
   };
 
   return (
+    <AdminLayout>
     <div className="container mt-5">
       <div className="card p-4 shadow">
         <h3 className="mb-4 text-center">Ajouter un nouveau Dataset</h3>
@@ -119,5 +120,6 @@ export default function AddDatasetForm() {
         </form>
       </div>
     </div>
+    </AdminLayout>
   );
 }

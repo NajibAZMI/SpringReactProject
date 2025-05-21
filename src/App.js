@@ -11,6 +11,7 @@ import AffecterAnnotateurs from './Admin/AffecterAnnotateurs.jsx';
 import TachesList from './Annotateur/TachesList.jsx';
 import TravaillerTache from './Annotateur/TravaillerTache.jsx';
 import GestionAnntateurs from './Admin/GestionAnnotateurs.jsx';
+import Dashboard from './Admin/Dashboard.jsx';
 function App() {
   return (
     <Router>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/Admin/ajouter-utilisateur/:id?" element={<AddUserForm />} /> 
         <Route path="/Admin/GestionAnntateurs" element={<GestionAnntateurs />} /> 
         <Route path="/Admin/AddDataset" element={<AddDatasetForm />} /> 
+        <Route path="/Admin/DashBoard" element={<Dashboard />} /> 
         <Route path="/Admin/DataSetList" element={<DataSetList />} /> 
         <Route path="/Admin/datasets/:id" element={<DatasetDetail />} />
         <Route path="/Admin/datasets/AddAnnotateurs/:datasetId" element={<AffecterAnnotateurs />} />

@@ -1,8 +1,6 @@
 // App.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Login/LoginForm';
-
-import UserHome from './Annotateur/UserHome.jsx';
 import AddUserForm from './Admin/AddUserForm.jsx';
 import AddDatasetForm from './Admin/AddDatasetForm.jsx';
 import DataSetList from './Admin/DataSetList.jsx';

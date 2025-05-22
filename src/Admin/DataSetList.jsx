@@ -125,11 +125,7 @@ export default function DatasetList() {
           </table>
         </div>
 
-        <div className="text-center mt-4">
-          <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
-            Retour à l'accueil admin
-          </Link>
-        </div>
+      
       </div>
     </AdminLayout>
   );

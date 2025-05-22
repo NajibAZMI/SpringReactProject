@@ -119,11 +119,7 @@ export default function GestionAnntateurs() {
           </table>
         </div>
 
-        <div className="mt-4">
-          <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
-            Retour à l'accueil admin
-          </Link>
-        </div>
+        
       </div>
 
      

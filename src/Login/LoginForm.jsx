@@ -65,7 +65,7 @@ const handleSubmit = async (e) => {
         />
         <button type="submit" style={styles.button}>Se connecter</button>
       </form>
-      {role && <p>Rôle détecté : <strong>{role}</strong></p>}
+     
     </div>
   );
 }

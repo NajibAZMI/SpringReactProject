@@ -81,7 +81,7 @@ export default function AdminLayout({ children }) {
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/Admin/GestionAnntateurs">
-                    <i className="bi bi-people-fill me-2"></i> Annotateurs
+                    <i class="fa-solid fa-users"></i> Annotateurs
                   </Link>
                 </li>
                 <li className="nav-item">
@@ -118,7 +118,8 @@ export default function AdminLayout({ children }) {
             </div>
             <div className="modal-body">
               <p><strong>Nom :</strong> {user?.nom || "Invité"}</p>
-              <p><strong>Email :</strong> {user?.email || "Non défini"}</p>
+              <p><strong>Email :</strong> {user?.login || "Non défini"}</p>
+              <p><strong>Role :</strong> Admin</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">

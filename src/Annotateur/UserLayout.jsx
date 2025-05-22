@@ -113,8 +113,10 @@ export default function UserLayout({ children }) {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
             </div>
             <div className="modal-body">
+              <p><strong>Prénom:</strong> {user?.prenom || "Invité"}</p>
               <p><strong>Nom :</strong> {user?.nom || "Invité"}</p>
               <p><strong>Email :</strong> {user?.login || "Non défini"}</p>
+              <p><strong>Role :</strong> Annotateur</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">

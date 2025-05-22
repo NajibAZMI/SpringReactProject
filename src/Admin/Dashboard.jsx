@@ -1,11 +1,18 @@
-// src/pages/AdminDashboard.jsx
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
 } from "recharts";
 import AdminLayout from "./AdminLayout";
 
 export default function AdminDashboard() {
+  const [user, setUser] = useState(null);
+  const [NombreDataSet,setNombreDataSet]=useState(0);
+    useEffect(() => {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+    }, []);
   const data = [
     { date: "2025-05-12", value: 0 },
     { date: "2025-05-13", value: 0 },

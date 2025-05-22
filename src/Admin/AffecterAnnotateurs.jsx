@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import AdminLayout from "./AdminLayout";
 
 export default function AffecterAnnotateurs() {
   const { datasetId } = useParams();
@@ -9,7 +10,6 @@ export default function AffecterAnnotateurs() {
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
-  // Récupération des annotateurs
   useEffect(() => {
     const fetchAnnotateurs = async () => {
       try {
@@ -19,7 +19,7 @@ export default function AffecterAnnotateurs() {
         setAnnotateurs(data);
       } catch (error) {
         console.error('Erreur :', error);
-        setMessage("Impossible de charger les annotateurs.");
+        setMessage("❌ Impossible de charger les annotateurs.");
       } finally {
         setLoading(false);
       }
@@ -28,7 +28,6 @@ export default function AffecterAnnotateurs() {
     fetchAnnotateurs();
   }, []);
 
-  // Gestion des cases à cocher
   const handleCheckboxChange = (id) => {
     setSelectedAnnotateurs((prev) => ({
       ...prev,
@@ -36,7 +35,6 @@ export default function AffecterAnnotateurs() {
     }));
   };
 
-  // Fonction d'affectation
   const handleAffecter = async () => {
     const selectedIds = Object.keys(selectedAnnotateurs).filter((id) => selectedAnnotateurs[id]);
 
@@ -67,53 +65,85 @@ export default function AffecterAnnotateurs() {
   };
 
   return (
-    <div className="container my-5">
-      <h2 className="text-center text-success mb-4">Affecter des Annotateurs au Dataset #{datasetId}</h2>
+    <AdminLayout>
+      <div className="container my-5">
+        <h2 className="text-center text-primary mb-4">
+          📌 Affectation d'Annotateurs au Dataset 
+        </h2>
 
-      {loading ? (
-        <p className="text-center">Chargement des annotateurs...</p>
-      ) : (
-        <>
-          <table className="table table-bordered table-striped">
-            <thead className="table-success">
-              <tr>
-                <th className="text-center">Nom de l'Annotateur</th>
-                <th className="text-center">Sélectionner</th>
-              </tr>
-            </thead>
-            <tbody>
-              {annotateurs.map((annotateur) => (
-                <tr key={annotateur.id}>
-                  <td>{annotateur.nom}</td>
-                  <td className="text-center">
-                    <input
-                      type="checkbox"
-                      checked={!!selectedAnnotateurs[annotateur.id]}
-                      onChange={() => handleCheckboxChange(annotateur.id)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
+        {loading ? (
           <div className="text-center">
-            <button
-              onClick={handleAffecter}
-              disabled={sending}
-              className={`btn btn-success ${sending ? 'disabled' : ''} mt-3`}
-            >
-              {sending ? 'Affectation en cours...' : 'Valider'}
-            </button>
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Chargement...</span>
+            </div>
+            <p className="mt-2">Chargement des annotateurs...</p>
           </div>
+        ) : (
+          <div className="card shadow-sm">
+            <div className="card-header bg-light">
+              <strong>Liste des Annotateurs</strong>
+            </div>
+            <div className="card-body">
+              {annotateurs.length === 0 ? (
+                <div className="alert alert-warning text-center">
+                  Aucun annotateur disponible.
+                </div>
+              ) : (
+                <div className="table-responsive">
+                  <table className="table table-bordered table-hover align-middle">
+                    <thead className="table-success">
+                      <tr>
+                        <th>Nom de l'Annotateur</th>
+                        <th className="text-center">Sélectionner</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {annotateurs.map((annotateur) => (
+                        <tr key={annotateur.id}>
+                          <td>{annotateur.nom} {annotateur.prenom}</td>
+                          <td className="text-center">
+                            <input
+                              type="checkbox"
+                              className="form-check-input"
+                              checked={!!selectedAnnotateurs[annotateur.id]}
+                              onChange={() => handleCheckboxChange(annotateur.id)}
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
 
-          {message && (
-            <p className={`mt-3 text-center ${message.includes('succès') ? 'text-success' : 'text-danger'}`}>
-              {message}
-            </p>
-          )}
-        </>
-      )}
-    </div>
+              <div className="text-center">
+                <button
+                  onClick={handleAffecter}
+                  disabled={sending}
+                  className={`btn btn-success mt-3 px-4 ${sending ? 'disabled' : ''}`}
+                >
+                  {sending ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                      Affectation en cours...
+                    </>
+                  ) : (
+                    <>
+                      ✅ Valider
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {message && (
+                <div className={`alert mt-4 text-center ${message.includes('succès') ? 'alert-success' : 'alert-danger'}`}>
+                  {message}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </AdminLayout>
   );
 }

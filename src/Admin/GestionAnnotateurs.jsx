@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import AdminLayout from "./AdminLayout";
 
-import { useLocation } from "react-router-dom";
+// ✅ Import Bootstrap CSS & JS proprement
+import "bootstrap/dist/css/bootstrap.min.css";
+import * as bootstrap from "bootstrap";
+window.bootstrap = bootstrap; // 🔥 expose Bootstrap JS à window.bootstrap
 
 export default function GestionAnntateurs() {
   const location = useLocation();
@@ -9,13 +13,13 @@ export default function GestionAnntateurs() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [modalUserId, setModalUserId] = useState(null);
+  const [actionType, setActionType] = useState("desactiver");
 
   useEffect(() => {
     fetch("http://localhost:8080/api/utilisateurs")
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Erreur serveur");
-        }
+        if (!res.ok) throw new Error("Erreur serveur");
         return res.json();
       })
       .then((data) => {
@@ -29,61 +33,147 @@ export default function GestionAnntateurs() {
       });
   }, []);
 
-  if (loading) {
-    return <div className="text-center mt-5">Chargement des utilisateurs...</div>;
-  }
+  const openModal = (id, type) => {
+    setModalUserId(id);
+    setActionType(type);
+    const modal = new window.bootstrap.Modal(
+      document.getElementById("confirmModal")
+    );
+    modal.show();
+  };
 
-  if (error) {
+  const handleConfirmAction = async () => {
+    const endpoint = `http://localhost:8080/api/utilisateurs/${modalUserId}/${actionType}`;
+    try {
+      const response = await fetch(endpoint, { method: "PUT" });
+      if (!response.ok) throw new Error("Erreur HTTP");
+      window.location.reload();
+    } catch (error) {
+      console.error("Erreur :", error);
+      alert("❌ Échec de l'opération.");
+    }
+  };
+
+  if (loading)
+    return <div className="text-center mt-5">Chargement des utilisateurs...</div>;
+
+  if (error)
     return <div className="alert alert-danger text-center mt-5">{error}</div>;
-  }
 
   return (
-   
-    <div className="container mt-5">
-       {successMessage && (
-  <div className="alert alert-success text-center">{successMessage}</div>
-)}
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Gestion des Annotateurs</h2>
-        <Link to="/Admin/ajouter-utilisateur" className="btn btn-primary">
-          + Ajouter Annotateur
-        </Link>
-      </div>
+    <AdminLayout>
+      <div className="container mt-5">
+        {successMessage && (
+          <div className="alert alert-success text-center">{successMessage}</div>
+        )}
 
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover align-middle">
-          <thead className="table-dark">
-            <tr>
-              <th>Nom</th>
-              <th>Prénom</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.nom}</td>
-                <td>{user.prenom}</td>
-                <td>
-                  <Link
-                    to={`/Admin/ajouter-utilisateur/${user.id}`}
-                    className="btn btn-sm btn-warning me-2"
-                  >
-                    Modifier 
-                  </Link>
-                  <button className="btn btn-sm btn-danger">Supprimer</button>
-                </td>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>Gestion des Annotateurs</h2>
+          <Link to="/Admin/ajouter-utilisateur" className="btn btn-primary">
+            + Ajouter Annotateur
+          </Link>
+        </div>
+
+        <div className="table-responsive">
+          <table className="table table-bordered table-hover align-middle">
+            <thead className="table-dark">
+              <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.nom}</td>
+                  <td>{user.prenom}</td>
+                  <td>
+                    {user.isActive ? (
+                      <>
+                        <Link
+                          to={`/Admin/ajouter-utilisateur/${user.id}`}
+                          className="btn btn-sm btn-warning me-2"
+                        >
+                          Modifier
+                        </Link>
+                        <button
+                          className="btn btn-sm btn-danger"
+                          onClick={() => openModal(user.id, "desactiver")}
+                        >
+                          Désactiver
+                        </button>
+                      </>
+                    ) : (
+                      <button
+                        className="btn btn-sm btn-success"
+                        onClick={() => openModal(user.id, "activer")}
+                      >
+                        Activer
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-4">
+          <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
+            Retour à l'accueil admin
+          </Link>
+        </div>
       </div>
 
-      <div className="mt-4">
-        <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
-          Retour à l'accueil admin
-        </Link>
+     
+      <div
+        className="modal fade"
+        id="confirmModal"
+        tabIndex="-1"
+        aria-labelledby="confirmModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div
+  className={`modal-header ${
+    actionType === "desactiver" ? "bg-danger" : "bg-success"
+  }`}
+>
+              <h5 className="modal-title" id="confirmModalLabel">
+                Confirmation
+              </h5>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Fermer"
+              ></button>
+            </div>
+            <div className="modal-body text-center">
+              Voulez-vous vraiment{" "}
+              {actionType === "desactiver" ? "désactiver" : "activer"} ce compte ?
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Annuler
+              </button>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleConfirmAction}
+              >
+                Confirmer
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

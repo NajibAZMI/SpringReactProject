@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import AdminLayout from "./AdminLayout";
 
 export default function DatasetDetail() {
   const { id } = useParams();
@@ -46,85 +47,92 @@ export default function DatasetDetail() {
     setCurrentPage(page);
   };
 
-  if (!dataset) return <p>Dataset non trouvé.</p>;
+  if (!dataset) return <div className="container py-5"><div className="alert alert-warning">Dataset non trouvé.</div></div>;
 
   return (
-    <div className="container py-5">
-      <h2>Détails du Dataset</h2>
-      <div className="mb-4">
-        <p><strong>Nom :</strong> {dataset.nomDataset}</p>
-        <p><strong>Description :</strong> {dataset.descriptionDataset}</p>
-        <p><strong>Avancement :</strong> 0%</p>
-        <p><strong>Classes :</strong> {dataset.classesPossibles.map(c => c.textclass).join(", ")}</p>
+    <AdminLayout>
+      <div className="container py-5">
+        <h2 className="mb-4">🗂️ Détails du Dataset</h2>
+
+        <div className="card mb-4 shadow-sm">
+          <div className="card-body">
+            <p><span className="fw-bold">Nom :</span> {dataset.nomDataset}</p>
+            <p><span className="fw-bold">Description :</span> {dataset.descriptionDataset}</p>
+            <p><span className="fw-bold">Avancement :</span> 0%</p>
+            <p><span className="fw-bold">Classes :</span> {dataset.classesPossibles.map(c => c.textclass).join(", ")}</p>
+          </div>
+        </div>
+
+        <h4 className="mb-3">👥 Annotateurs associés</h4>
+        {annotateurs.length > 0 ? (
+          <div className="table-responsive mb-4">
+            <table className="table table-bordered table-hover">
+              <thead className="table-light">
+                <tr>
+                  <th>Nom</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {annotateurs.map((a) => (
+                  <tr key={a.id}>
+                    <td>{a.nom} {a.prenom}</td>
+                    <td>{a.login}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="alert alert-info">Aucun annotateur assigné à ce dataset.</div>
+        )}
+
+        <h4 className="mb-3">📝 Couples de textes</h4>
+        {currentCouples && currentCouples.length > 0 ? (
+          <div className="table-responsive mb-4">
+            <table className="table table-bordered table-striped">
+              <thead className="table-light">
+                <tr>
+                  <th>Texte 1</th>
+                  <th>Texte 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentCouples.map((couple) => (
+                  <tr key={couple.id}>
+                    <td>{couple.text1}</td>
+                    <td>{couple.text2}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="alert alert-info">Aucun couple de textes trouvé pour ce dataset.</div>
+        )}
+
+        <div className="d-flex justify-content-between align-items-center my-4">
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => goToPage(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            ◀ Précédent
+          </button>
+          <span className="text-muted">Page {currentPage} sur {totalPages}</span>
+          <button
+            className="btn btn-outline-primary"
+            onClick={() => goToPage(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Suivant ▶
+          </button>
+        </div>
+
+        <Link to="/Admin/DataSetList">
+          <button className="btn btn-success mt-3">⬅ Retour à la liste</button>
+        </Link>
       </div>
-
-      <h3>Annotateurs associés</h3>
-      {annotateurs.length > 0 ? (
-        <table className="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            {annotateurs.map((a) => (
-              <tr key={a.id}>
-                <td>{a.nom} {a.prenom}</td>
-                <td>{a.login}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Aucun annotateur assigné à ce dataset.</p>
-      )}
-
-      <h3>Couples de textes</h3>
-      {currentCouples && currentCouples.length > 0 ? (
-        <table className="table table-bordered table-striped">
-          <thead>
-            <tr>
-              <th>Texte 1</th>
-              <th>Texte 2</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentCouples.map((couple) => (
-              <tr key={couple.id}>
-                <td>{couple.text1}</td>
-                <td>{couple.text2}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>Aucun couple de textes trouvé pour ce dataset.</p>
-      )}
-
-      <div className="d-flex justify-content-between align-items-center my-3">
-        <button
-          className="btn btn-secondary"
-          onClick={() => goToPage(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Précédent
-        </button>
-        <span>
-          Page {currentPage} sur {totalPages}
-        </span>
-        <button
-          className="btn btn-secondary"
-          onClick={() => goToPage(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Suivant
-        </button>
-      </div>
-
-      <Link to="/Admin/DataSetList">
-        <button className="btn btn-primary mt-3">Retour à la liste</button>
-      </Link>
-    </div>
+    </AdminLayout>
   );
 }

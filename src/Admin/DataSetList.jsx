@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import AdminLayout from "./AdminLayout";
 
 export default function DatasetList() {
   const [datasets, setDatasets] = useState([]);
   const [avancements, setAvancements] = useState({});
+  const location = useLocation();
+  const successMessage = location.state?.successMessage;
 
   useEffect(() => {
     const fetchDatasets = async () => {
@@ -40,72 +43,94 @@ export default function DatasetList() {
     fetchDatasets();
   }, []);
 
-  return (
-    <div className="container mt-5">
-      <h2 className="mb-4 text-center">Liste des Datasets</h2>
-      <div className="table-responsive">
-        <table className="table table-bordered table-hover align-middle">
-          <thead className="table-dark">
-            <tr>
-              <th>Nom</th>
-              <th>Description</th>
-              <th>Avancement</th>
-              <th>Action</th>
-              <th>Exporter</th>
-            </tr>
-          </thead>
-          <tbody>
-            {datasets.map((dataset) => (
-              <tr key={dataset.id}>
-                <td>{dataset.nomDataset}</td>
-                <td>{dataset.descriptionDataset}</td>
-                <td>
-                  {avancements[dataset.id] !== undefined
-                    ? `${avancements[dataset.id].toFixed(2)}%`
-                    : "Chargement..."}
-                </td>
-                <td>
-                  <Link
-                    to={`/Admin/datasets/${dataset.id}`}
-                    className="btn btn-sm btn-outline-primary me-2"
-                  >
-                    Voir
-                  </Link>
-                  <Link
-                    to={`/Admin/datasets/AddAnnotateurs/${dataset.id}`}
-                    className="btn btn-sm btn-outline-secondary"
-                  >
-                    Ajouter Annotateurs
-                  </Link>
-                </td>
-                <td>
-                  {avancements[dataset.id] === 100 ? (
-                    <button
-                      className="btn btn-success btn-sm"
-                      onClick={() =>
-                        window.open(
-                          `http://localhost:8080/api/datasets/${dataset.id}/export`,
-                          "_blank"
-                        )
-                      }
-                    >
-                      Exporter CSV
-                    </button>
-                  ) : (
-                    <span className="text-muted">Incomplet</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+  // Nettoyer le message après affichage
+  useEffect(() => {
+    if (successMessage) {
+      window.history.replaceState({}, document.title);
+    }
+  }, [successMessage]);
 
-      <div className="text-center mt-4">
-        <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
-          Retour à l'accueil admin
-        </Link>
+  return (
+    <AdminLayout>
+      <div className="container mt-5">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2>Liste des Datasets</h2>
+          <Link to="/Admin/AddDataset" className="btn btn-primary">
+            + Ajouter DataSet
+          </Link>
+        </div>
+
+        {/* Message de succès */}
+        {successMessage && (
+          <div className="alert alert-success text-center" role="alert">
+            {successMessage}
+          </div>
+        )}
+
+        <div className="table-responsive">
+          <table className="table table-bordered table-hover align-middle">
+            <thead className="table-dark">
+              <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Avancement</th>
+                <th>Action</th>
+                <th>Exporter</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datasets.map((dataset) => (
+                <tr key={dataset.id}>
+                  <td>{dataset.nomDataset}</td>
+                  <td>{dataset.descriptionDataset}</td>
+                  <td>
+                    {avancements[dataset.id] !== undefined
+                      ? `${avancements[dataset.id].toFixed(2)}%`
+                      : "Chargement..."}
+                  </td>
+                  <td>
+                    <Link
+                      to={`/Admin/datasets/${dataset.id}`}
+                      className="btn btn-sm btn-outline-primary me-2"
+                    >
+                      Voir
+                    </Link>
+                    <Link
+                      to={`/Admin/datasets/AddAnnotateurs/${dataset.id}`}
+                      className="btn btn-sm btn-outline-secondary"
+                    >
+                      Ajouter Annotateurs
+                    </Link>
+                  </td>
+                  <td>
+                    {avancements[dataset.id] === 100 ? (
+                      <button
+                        className="btn btn-success btn-sm"
+                        onClick={() =>
+                          window.open(
+                            `http://localhost:8080/api/datasets/${dataset.id}/export`,
+                            "_blank"
+                          )
+                        }
+                      >
+                        Exporter CSV
+                      </button>
+                    ) : (
+                      <span className="text-muted">Incomplet</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="text-center mt-4">
+          <Link to="/Admin/admin-dashboard" className="btn btn-secondary">
+            Retour à l'accueil admin
+          </Link>
+        </div>
       </div>
-    </div>
+    </AdminLayout>
   );
 }

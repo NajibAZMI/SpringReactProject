@@ -29,10 +29,12 @@ const handleSubmit = async (e) => {
     setRole(data.role);
     setError('');
     localStorage.setItem("user", JSON.stringify(data));
-    if (data.role === 'ADMIN_ROLE') {
+    if (data.role === 'ADMIN_ROLE' ) {
       navigate('/Admin/admin-dashboard');
-    } else if (data.role === 'USER_ROLE') {
+    } else if (data.role === 'USER_ROLE' && data.isActive===true) {
       navigate('/User/user-dashboard');
+    }else if(data.isActive===false){
+       alert("Non Active")
     }
   } catch (err) {
     setError(err.message);

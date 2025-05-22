@@ -1,7 +1,7 @@
 // App.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginForm from './Login/LoginForm';
-import AdminHome from './Admin/AdminHome.jsx';
+
 import UserHome from './Annotateur/UserHome.jsx';
 import AddUserForm from './Admin/AddUserForm.jsx';
 import AddDatasetForm from './Admin/AddDatasetForm.jsx';
@@ -17,7 +17,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginForm />} />
-        <Route path="/Admin/admin-dashboard" element={<AdminHome />} />
+        <Route path="/Admin/admin-dashboard" element={<Dashboard />} />
         <Route path="/User/user-dashboard" element={<UserHome />} />
         <Route path="/Admin/ajouter-utilisateur/:id?" element={<AddUserForm />} /> 
         <Route path="/Admin/GestionAnntateurs" element={<GestionAnntateurs />} /> 

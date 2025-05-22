@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-
+import UserLayout from './UserLayout'
 export default function TachesList() {
   const { id } = useParams();
   const [Taches, setTaches] = useState([]);
@@ -25,6 +25,7 @@ export default function TachesList() {
   }, [id]);
 
   return (
+    <UserLayout>
     <div className="container mt-5">
       <h2 className="text-center mb-4">Liste des Tâches</h2>
 
@@ -77,5 +78,6 @@ export default function TachesList() {
         Retour à l'accueil
       </Link>
     </div>
+    </UserLayout>
   );
 }

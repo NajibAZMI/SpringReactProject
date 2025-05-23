@@ -41,7 +41,7 @@ export default function AddDatasetForm() {
       }
 
       
-      navigate("/Admin/DataSetList", { state: { successMessage: "✅ Dataset ajouté avec succès !" } });
+      navigate("/Admin/DataSetList", { state: { successMessage: " Dataset ajouté avec succès !" } });
 
     } catch (err) {
       console.error(err);

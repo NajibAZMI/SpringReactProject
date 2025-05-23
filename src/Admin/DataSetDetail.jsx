@@ -6,10 +6,12 @@ export default function DatasetDetail() {
   const { id } = useParams();
   const [dataset, setDataset] = useState(null);
   const [annotateurs, setAnnotateurs] = useState([]);
+  const [avancement, setAvancement] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [couplesPerPage] = useState(10);
 
   useEffect(() => {
+    // Charger le dataset
     const fetchDataset = async () => {
       try {
         const response = await fetch(`http://localhost:8080/api/datasets/${id}`);
@@ -21,6 +23,7 @@ export default function DatasetDetail() {
       }
     };
 
+    // Charger les annotateurs
     const fetchAnnotateurs = async () => {
       try {
         const response = await fetch(`http://localhost:8080/api/datasets/${id}/annotateurs`);
@@ -32,14 +35,28 @@ export default function DatasetDetail() {
       }
     };
 
+    // Charger l'avancement
+    const fetchAvancement = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/datasets/Avancement/${id}`);
+        if (!response.ok) throw new Error('Erreur lors du chargement de l\'avancement');
+        const av = await response.json();
+        setAvancement(av);
+      } catch (error) {
+        console.error('Erreur avancement :', error);
+        setAvancement(0); // Par défaut 0 en cas d'erreur
+      }
+    };
+
     fetchDataset();
     fetchAnnotateurs();
+    fetchAvancement();
   }, [id]);
 
   const indexOfLastCouple = currentPage * couplesPerPage;
   const indexOfFirstCouple = indexOfLastCouple - couplesPerPage;
-  const currentCouples = dataset?.coupleTextList.slice(indexOfFirstCouple, indexOfLastCouple);
-  const totalCouples = dataset?.coupleTextList.length || 0;
+  const currentCouples = dataset?.coupleTextList?.slice(indexOfFirstCouple, indexOfLastCouple) || [];
+  const totalCouples = dataset?.coupleTextList?.length || 0;
   const totalPages = Math.ceil(totalCouples / couplesPerPage);
 
   const goToPage = (page) => {
@@ -58,7 +75,10 @@ export default function DatasetDetail() {
           <div className="card-body">
             <p><span className="fw-bold">Nom :</span> {dataset.nomDataset}</p>
             <p><span className="fw-bold">Description :</span> {dataset.descriptionDataset}</p>
-            <p><span className="fw-bold">Avancement :</span> 0%</p>
+            <p>
+              <span className="fw-bold">Avancement :</span>{" "}
+              {avancement !== null ? `${avancement.toFixed(2)}%` : "Chargement..."}
+            </p>
             <p><span className="fw-bold">Classes :</span> {dataset.classesPossibles.map(c => c.textclass).join(", ")}</p>
           </div>
         </div>
@@ -88,7 +108,7 @@ export default function DatasetDetail() {
         )}
 
         <h4 className="mb-3">📝 Couples de textes</h4>
-        {currentCouples && currentCouples.length > 0 ? (
+        {currentCouples.length > 0 ? (
           <div className="table-responsive mb-4">
             <table className="table table-bordered table-striped">
               <thead className="table-light">

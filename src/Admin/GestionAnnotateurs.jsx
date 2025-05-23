@@ -62,114 +62,143 @@ export default function GestionAnntateurs() {
 
   return (
     <AdminLayout>
-      <div className="container mt-5">
-        {successMessage && (
-          <div className="alert alert-success text-center">{successMessage}</div>
-        )}
-
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2>Gestion des Annotateurs</h2>
-          <Link to="/Admin/ajouter-utilisateur" className="btn btn-primary">
-            + Ajouter Annotateur
-          </Link>
-        </div>
-
-        <div className="table-responsive">
-          <table className="table table-bordered table-hover align-middle">
-            <thead className="table-dark">
-              <tr>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.nom}</td>
-                  <td>{user.prenom}</td>
-                  <td>
-                    {user.isActive ? (
-                      <>
-                        <Link
-                          to={`/Admin/ajouter-utilisateur/${user.id}`}
-                          className="btn btn-sm btn-warning me-2"
-                        >
-                          Modifier
-                        </Link>
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => openModal(user.id, "desactiver")}
-                        >
-                          Désactiver
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        className="btn btn-sm btn-success"
-                        onClick={() => openModal(user.id, "activer")}
-                      >
-                        Activer
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        
+  <div className="container mt-5">
+    {successMessage && (
+      <div className="alert alert-success text-center rounded shadow-sm">
+        {successMessage}
       </div>
+    )}
 
-     
-      <div
-        className="modal fade"
-        id="confirmModal"
-        tabIndex="-1"
-        aria-labelledby="confirmModalLabel"
-        aria-hidden="true"
+    <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+      <h2 className="fw-bold text-primary mb-0">Gestion des Annotateurs</h2>
+      <Link
+        to="/Admin/ajouter-utilisateur"
+        className="btn btn-primary btn-lg shadow-sm"
+        style={{ minWidth: 180 }}
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div
-  className={`modal-header ${
-    actionType === "desactiver" ? "bg-danger" : "bg-success"
-  }`}
->
-              <h5 className="modal-title" id="confirmModalLabel">
-                Confirmation
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Fermer"
-              ></button>
-            </div>
-            <div className="modal-body text-center">
-              Voulez-vous vraiment{" "}
-              {actionType === "desactiver" ? "désactiver" : "activer"} ce compte ?
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-bs-dismiss="modal"
-              >
-                Annuler
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleConfirmAction}
-              >
-                Confirmer
-              </button>
-            </div>
-          </div>
+        <i className="bi bi-plus-lg me-2"></i> Ajouter Annotateur
+      </Link>
+    </div>
+
+    <div className="table-responsive shadow-sm rounded" style={{ overflowX: "auto" }}>
+      <table
+        className="table table-hover align-middle mb-0"
+        style={{ borderCollapse: "separate", borderSpacing: "0 10px" }}
+      >
+        <thead className="bg-primary text-white rounded-3">
+          <tr>
+            <th className="ps-3 rounded-start">Nom</th>
+            <th>Prénom</th>
+            <th className="rounded-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users.map((user) => (
+            <tr
+              key={user.id}
+              className="bg-white shadow-sm rounded-3"
+              style={{ transition: "background-color 0.3s" }}
+            >
+              <td className="ps-3 fw-semibold">{user.nom}</td>
+              <td>{user.prenom}</td>
+              <td>
+                {user.isActive ? (
+                  <>
+                    <Link
+                      to={`/Admin/ajouter-utilisateur/${user.id}`}
+                      className="btn btn-sm btn-warning me-2 shadow-sm"
+                      title="Modifier cet annotateur"
+                      style={{ transition: "transform 0.2s" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                    >
+                      <i className="bi bi-pencil-square me-1"></i> Modifier
+                    </Link>
+                    <button
+                      className="btn btn-sm btn-danger shadow-sm"
+                      onClick={() => openModal(user.id, "desactiver")}
+                      title="Désactiver cet annotateur"
+                      style={{ transition: "transform 0.2s" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                    >
+                      <i className="bi bi-person-x me-1"></i> Désactiver
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    className="btn btn-sm btn-success shadow-sm"
+                    onClick={() => openModal(user.id, "activer")}
+                    title="Activer cet annotateur"
+                    style={{ transition: "transform 0.2s" }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                  >
+                    <i className="bi bi-person-check me-1"></i> Activer
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {/* Modal confirmation */}
+  <div
+    className="modal fade"
+    id="confirmModal"
+    tabIndex="-1"
+    aria-labelledby="confirmModalLabel"
+    aria-hidden="true"
+  >
+    <div className="modal-dialog modal-dialog-centered">
+      <div className="modal-content shadow">
+        <div
+          className={`modal-header ${
+            actionType === "desactiver" ? "bg-danger text-white" : "bg-success text-white"
+          } rounded-top`}
+        >
+          <h5 className="modal-title" id="confirmModalLabel">
+            Confirmation
+          </h5>
+          <button
+            type="button"
+            className="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Fermer"
+          ></button>
+        </div>
+        <div className="modal-body text-center fs-5">
+          Voulez-vous vraiment{" "}
+          <span className="fw-bold">
+            {actionType === "desactiver" ? "désactiver" : "activer"}
+          </span>{" "}
+          ce compte ?
+        </div>
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-secondary btn-lg"
+            data-bs-dismiss="modal"
+          >
+            Annuler
+          </button>
+          <button
+            type="button"
+            className={`btn btn-lg ${
+              actionType === "desactiver" ? "btn-danger" : "btn-success"
+            }`}
+            onClick={handleConfirmAction}
+          >
+            Confirmer
+          </button>
         </div>
       </div>
-    </AdminLayout>
+    </div>
+  </div>
+</AdminLayout>
+
   );
 }

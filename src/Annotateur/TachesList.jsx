@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import UserLayout from './UserLayout'
+import UserLayout from "./UserLayout";
+
 export default function TachesList() {
   const { id } = useParams();
   const [Taches, setTaches] = useState([]);
@@ -26,58 +27,76 @@ export default function TachesList() {
 
   return (
     <UserLayout>
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Liste des Tâches</h2>
+      <div className="container mt-5">
+        <h2 className="text-center text-primary fw-bold mb-4">
+          📋 Liste des Tâches
+        </h2>
 
-      <table className="table table-bordered table-hover">
-        <thead className="table-dark">
-          <tr>
-            <th>Id</th>
-            <th>Nom DataSet</th>
-            <th>Date Limite</th>
-            <th>Avancement</th>
-            <th>Taille</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Taches.length > 0 ? (
-            Taches.map((Tache) => (
-              <tr key={Tache.id}>
-                <td>{Tache.id}</td>
-                <td>{Tache.nomDataset || "N/A"}</td>
-                <td>{Tache.datelimite}</td>
-                <td>{Tache.avancement}%</td>
-                <td>{Tache.taille}</td>
-                <td>
-                  <Link
-                    to={`/User/TravaillerTache/${Tache.id}`}
-                    className="btn btn-sm"
-                    style={{
-                      backgroundColor:
-                        Tache.avancement === 100 ? "#28a745" : "#007bff",
-                      color: "white",
-                    }}
-                  >
-                    {Tache.avancement === 100 ? "Terminé" : "Travailler"}
-                  </Link>
-                </td>
+        <div className="table-responsive">
+          <table className="table table-hover align-middle shadow-sm rounded">
+            <thead className="table-primary">
+              <tr>
+                <th>ID</th>
+                <th>Nom du Dataset</th>
+                <th>Date Limite</th>
+                <th>Avancement</th>
+                <th>Taille</th>
+                <th className="text-center">Action</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="6" className="text-center">
-                Aucune tâche disponible
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+              {Taches.length > 0 ? (
+                Taches.map((Tache) => (
+                  <tr key={Tache.id}>
+                    <td className="fw-medium">{Tache.id}</td>
+                    <td>{Tache.nomDataset || "N/A"}</td>
+                    <td>{Tache.datelimite}</td>
+                    <td>
+                      <div className="progress" style={{ height: "20px" }}>
+                        <div
+                          className={`progress-bar ${
+                            Tache.avancement === 100
+                              ? "bg-success"
+                              : "bg-info"
+                          }`}
+                          role="progressbar"
+                          style={{ width: `${Tache.avancement}%` }}
+                          aria-valuenow={Tache.avancement}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                          {Tache.avancement}%
+                        </div>
+                      </div>
+                    </td>
+                    <td>{Tache.taille}</td>
+                    <td className="text-center">
+                      <Link
+                        to={`/User/TravaillerTache/${Tache.id}`}
+                        className={`btn btn-sm ${
+                          Tache.avancement === 100
+                            ? "btn-success"
+                            : "btn-primary"
+                        }`}
+                      >
+                        {Tache.avancement === 100 ? "Terminé" : "Travailler"}
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center text-muted py-4">
+                    Aucune tâche disponible pour le moment.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-      <Link to="/User/user-dashboard" className="btn btn-secondary mt-3">
-        Retour à l'accueil
-      </Link>
-    </div>
+       
+      </div>
     </UserLayout>
   );
 }

@@ -19,7 +19,7 @@ export default function AffecterAnnotateurs() {
         setAnnotateurs(data);
       } catch (error) {
         console.error('Erreur :', error);
-        setMessage("❌ Impossible de charger les annotateurs.");
+        setMessage(" Impossible de charger les annotateurs.");
       } finally {
         setLoading(false);
       }
@@ -55,10 +55,10 @@ export default function AffecterAnnotateurs() {
 
       if (!response.ok) throw new Error("Erreur lors de l'affectation");
 
-      setMessage('✅ Tâches affectées avec succès.');
+      setMessage(' Tâches affectées avec succès.');
     } catch (error) {
       console.error('Erreur :', error);
-      setMessage("❌ Une erreur s'est produite lors de l'affectation.");
+      setMessage(" Une erreur s'est produite lors de l'affectation.");
     } finally {
       setSending(false);
     }
@@ -129,7 +129,7 @@ export default function AffecterAnnotateurs() {
                     </>
                   ) : (
                     <>
-                      ✅ Valider
+                       Valider
                     </>
                   )}
                 </button>
